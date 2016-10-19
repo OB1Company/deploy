@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="images/favicon.png" />
 
   
-  <link rel="stylesheet" href="css/style-4a4dced7c8.min.css">
+  <link rel="stylesheet" href="css/style-b554e5213e.min.css">
   <!-- endinject -->
 </head>
 
@@ -43,20 +43,22 @@
 
       <div class="step clear marginTop15">
         <div class="label">Step 3: <span class="link" onclick="showAnswer(1)" style="color:#fff">See how</span></div>
-        <input v-model.lazy.trim="apiKey" type="text" class="token floatLeft" placeholder="Paste your Digital Ocean API token" />
-        <div v-on:click="createvps" v-bind:class="{readonly: showInvalidAPIKey}" class="buttonDeploy floatLeft">
+        <input v-model.lazy.trim="apiKey" v-on:keyup.enter="createvps" type="text" class="token floatLeft" placeholder="Paste your Digital Ocean API token" />
+        <div v-on:click="createvps" class="buttonDeploy floatLeft">
           <span class="text">Deploy!</span>
           <span class="rocket hide"><img src="images/rocket.png" style="height: 25px; width: 23px; position: relative; top: 7px; left: 0;" /></span>
         </div>
         <div class="clear"></div>
-        <div v-show="showInvalidAPIKey" class="error apiKey">Invalid API key!</div>
         <div class="small mobileHidden">e.g. 025370df16b30b5a6ddd40236817f78fcf4b02c1403524905bab790aaa60a543</div>
+        <br/>
+        <div v-show="invalidAPIKey" class="button error apiKey" style="margin: auto">⚠️ Invalid Token</div>
+        <div v-show="error" class="button error" style="margin: auto">⚠️ {{error}}</div>
       </div>
     </div>
 
     <!-- Progress bar -->
     <div v-show="node.stateHasStarted(nodeStates.CREATING_DROPLET) && !node.stateHasStarted(nodeStates.READY)" class="progressBar marginTop30">
-      <div v-bind:class="node.styleOptions(nodeStates.CREATING_DROPLET)"><span class="mobileHidden">Droplet</span></div>
+      <div v-bind:class="node.styleOptions(nodeStates.CREATING_DROPLET)"><span class="desktopHidden">1</span><span class="mobileHidden">Droplet</span></div>
       <div v-bind:class="node.styleOptions(nodeStates.INSTALLING_OPENBAZAAR_RELAY, nodeStates.STARTING_OPENBAZAAR_RELAY)"><span class="desktopHidden">2</span><span class="mobileHidden">Relay</span></div>
       <div v-bind:class="node.styleOptions(nodeStates.INSTALLING_SYSTEM_PACKAGES)"><span class="desktopHidden">3</span><span class="mobileHidden">Packages</span></div>
       <div v-bind:class="node.styleOptions(nodeStates.INSTALLING_OPENBAZAAR_SERVER, nodeStates.STARTING_OPENBAZAAR_SERVER)"><span class="desktopHidden">4</span><span class="mobileHidden">Server</span></div>
@@ -68,17 +70,14 @@
       <div class="terminal">
         <div id="terminalContent">
           <div v-show="node.stateHasStarted(nodeStates.CREATING_DROPLET)">Setting up <strong>Digital Ocean droplet</strong> (takes 1 minute)...</div>
-          <div v-show="node.stateHasFinished(nodeStates.CREATING_DROPLET)"><strong>droplet</strong> setup success</div>
-          <br/>
+          <div v-show="node.stateHasFinished(nodeStates.CREATING_DROPLET)"><strong>droplet</strong> setup success<br/><br/></div>
           <div v-show="node.stateHasStarted(nodeStates.INSTALLING_OPENBAZAAR_RELAY)">Installing <strong>OpenBazaar Relay</strong> (takes 2 minutes)...</div>
-          <div v-show="node.stateHasStarted(nodeStates.STARTING_OPENBAZAAR_RELAY)">Starting <strong>OpenBazaar Relay</strong></div>
-          <br/>
-          <div v-show="node.stateHasStarted(nodeStates.INSTALLING_SYSTEM_PACKAGES)">Installing <strong>system packages</strong> (takes 1 minute)...</div>
-          <br/>
+          <div v-show="node.stateHasStarted(nodeStates.STARTING_OPENBAZAAR_RELAY)">Starting <strong>OpenBazaar Relay</strong><br/><br/></div>
+          <div v-show="node.stateHasStarted(nodeStates.INSTALLING_SYSTEM_PACKAGES)">Installing <strong>system packages</strong> (takes 1 minute)...<br/><br/></div>
           <div v-show="node.stateHasStarted(nodeStates.INSTALLING_OPENBAZAAR_SERVER)">Installing <strong>OpenBazaar Server</strong> (takes 2 minutes)...</div>
           <div v-show="node.stateHasStarted(nodeStates.STARTING_OPENBAZAAR_SERVER)">Starting <strong>OpenBazaar Server</strong></div>
         </div>
-        <span class="blinking-cursor">|</span>
+        <div class="blinking-cursor">|</div>
       </div>
     </div>
 
@@ -164,23 +163,28 @@
       <div class="label">FAQ</div>
       <div class="question" id="q1" onclick="showAnswer(1)">
         Where do I find my Digital Ocean token?
-        <div class="answer hide" id="a1"><img src="images/token_instructions.gif" style="width: 100%" /></div>
+        <br/>
+        <div class="answer hide" id="a1"><iframe width="100%" height="315" src="https://www.youtube.com/embed/at6sNyvZruA" frameborder="0" allowfullscreen></iframe></div>
       </div>
       <div class="question" id="q2" onclick="showAnswer(2)">
         How do I connect my node to the OpenBazaar Client?
-        <div class="answer hide" id="a2"><img src="images/connect.gif" style="width: 100%" /></div>
+        <br/>
+        <div class="answer hide" id="a2"><iframe width="100%" height="315" src="https://www.youtube.com/embed/geWI7PlKHyA" frameborder="0" allowfullscreen></iframe></div>
       </div>
       <div class="question" id="q3" onclick="showAnswer(3)">
         How do I connect my node via SSH?
-        <div class="answer hide" id="a3">Waiting on gif...</div>
+        <br/>
+        <div class="answer hide" id="a3"><iframe width="100%" height="315" src="https://www.youtube.com/embed/greaLiqt5TE" frameborder="0" allowfullscreen></iframe></div>
       </div>
       <div class="question" id="q4" onclick="showAnswer(4)">
         How do I deactivate a node I deployed?
-        <div class="answer hide" id="a4">Waiting on gif...</div>
+        <br/>
+        <div class="answer hide" id="a4"><iframe width="100%" height="315" src="https://www.youtube.com/embed/tIw9r63FBTQ" frameborder="0" allowfullscreen></iframe></div>
       </div>
       <div class="question" id="q5" onclick="showAnswer(5)">
         How much does it cost to host the node?
-        <div class="answer hide" id="a5">Some text goes here...</div>
+        <br/>
+        <div class="answer hide" id="a5">You can run an OpenBazaar node off the lowest cost droplet, which is $5 per month. If you <a href="https://www.digitalocean.com/?refcode=eaa306f7dd3d&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste" target="_blank">sign-up via our referral code</a>, you will get $10 credit, which is 2 months of running OpenBazaar for free!</div>
       </div>
     </div>
   </div>
@@ -203,19 +207,57 @@ function showAnswer(num) {
 </script>
 
 <!-- Installation script. -->
-<script type="text/sh" id="cloud-init-script-template">#!/bin/bash
+<script type="text/sh" id="cloud-init-script-template">#!/usr/bin/env bash
+##
+## Author: Tyler Smith <tyler@ob1.io>
+##
+## Description:
+##   Install OpenBazaar and ob-relay. The goal is to install ob-relay as
+##   quickly as possible so we can use it to communicate the installation
+##   status back to the end user. Only do the bare minimum first.
+##
+
+set -eux
+set -o pipefail
 
 ##
-## Install OpenBazaar and ob-relay. The goal is to install ob-relay as
-## quickly as possible so we can use it to communicate the installation
-## status back to the end user. Only do the bare minimum first.
+## The docker ubuntu14.04 image needs these to get on the same level as the
+## DigitalOcean iamge
+##
+
+if [ -f /.dockerenv ]; then
+  apt-get update
+  apt-get -y upgrade iptables
+  apt-get install -y openssl ufw apt-transport-https software-properties-common python-software-properties python-setuptools
+  dpkg-divert --local --rename --add /sbin/initctl
+  rm /sbin/initctl
+  ln -s /bin/true /sbin/initctl
+fi
+
+##
+## Helper functions
 ##
 
 # Set state writes a string to a file that ob-relay can use to determine progress
 mkdir -p /home/openbazaar/.deploy
 function setState {
-echo -n $1 > /home/openbazaar/.deploy/state
+  echo -n "$1" > /home/openbazaar/.deploy/state
 }
+
+# Set the ownership of the given directory to openbazaar:openbazaar
+function _chown {
+  chown -R openbazaar:openbazaar "$1"
+}
+
+# Create a directory owned by openbazaar:openbazaar
+function _mkdir {
+  mkdir "$1"
+  chown -R openbazaar:openbazaar "$1"
+}
+
+##
+## Start ob-relay installation
+##
 
 setState INSTALLING_OPENBAZAAR_RELAY
 
@@ -223,19 +265,68 @@ setState INSTALLING_OPENBAZAAR_RELAY
 groupadd -f openbazaar
 useradd --shell /bin/bash --create-home --home /home/openbazaar -g openbazaar --password "$(openssl passwd -salt a -1 '{{vpsPassword}}')" openbazaar
 
+# Create update scripts
+cat > /usr/local/bin/checkout_latest_git_tag <<-EOF
+#!/bin/sh
+set -e
+cd \$1
+git fetch origin
+tag=\$(git tag | grep -P "^v\d+\.\d+\.\d+$" | sort -V | tail -1)
+git checkout --force \$tag
+EOF
+
+cat > /usr/local/bin/install_latest_openbazaard <<-EOF
+#!/bin/sh
+set -e
+/usr/local/bin/checkout_latest_git_tag /home/openbazaar/ob-server
+/home/openbazaar/venv/bin/pip install -r /home/openbazaar/ob-server/requirements.txt
+EOF
+
+cat > /usr/local/bin/install_latest_ob_relay <<-EOF
+#!/bin/sh
+set -e
+/usr/local/bin/checkout_latest_git_tag /home/openbazaar/ob-relay
+cd /home/openbazaar/ob-relay && npm install
+EOF
+
+_chown /usr/local/bin/checkout_latest_git_tag
+_chown /usr/local/bin/install_latest_ob_relay
+_chown /usr/local/bin/install_latest_openbazaard
+chmod 770 /usr/local/bin/{checkout_latest_git_tag,install_latest_openbazaard,install_latest_ob_relay}
+
+# Update every night at 3AM
+crontab -l -u openbazaar | { cat; echo "* 3 * * * /usr/local/bin/install_latest_ob_relay >> /home/openbazaar/logs/update_cron.log 2>&1"; } | crontab -u openbazaar - || true
+crontab -l -u openbazaar | { cat; echo "* 3 * * * /usr/local/bin/install_latest_openbazaard >> /home/openbazaar/logs/update_cron.log 2>&1"; } | crontab -u openbazaar - || true
+
+# Rotate logs daily
+cat > /etc/logrotate.d/openbazaar <<-EOF
+/home/openbazaar/logs/*.log {
+  daily
+  size 5M
+  create 644 openbazaar openbazaar
+  copytruncate
+  rotate 14
+  notifempty
+  compress
+  delaycompress
+  missingok
+  dateext
+}
+EOF
+
 # Create directory for logs
-mkdir /home/openbazaar/logs
-chmod -R 660 /home/openbazaar/ssl
+_mkdir /home/openbazaar/logs
 
 # Allow openbazaar user to control upstart jobs
 sudo bash -c 'echo "openbazaar ALL=(ALL) NOPASSWD: /usr/sbin/service openbazaard start, /usr/sbin/service openbazaard stop, /usr/sbin/service openbazaard restart, /usr/sbin/service openbazaard status, /sbin/start openbazaard, /sbin/stop openbazaard, /sbin/restart openbazaard" | (EDITOR="tee -a" visudo)'
 sudo bash -c 'echo "openbazaar ALL=(ALL) NOPASSWD: /usr/sbin/service ob-relay start, /usr/sbin/service ob-relay stop, /usr/sbin/service ob-relay restart, /usr/sbin/service ob-relay status, /sbin/start ob-relay, /sbin/stop ob-relay, /sbin/restart ob-relay" | (EDITOR="tee -a" visudo)'
 
 # Generate SSL cert
-mkdir /home/openbazaar/ssl
+_mkdir /home/openbazaar/ssl
 openssl req -nodes -batch -x509 -newkey rsa:2048 -keyout /home/openbazaar/ssl/deploy.key -out /home/openbazaar/ssl/deploy.crt
-chown -R openbazaar:openbazaar /home/openbazaar
-chmod -R 760 /home/openbazaar/ssl
+_chown /home/openbazaar/ssl
+chmod 700 /home/openbazaar/ssl
+chmod 600 /home/openbazaar/ssl/{deploy.key,deploy.crt}
 
 # Install git and nodejs
 apt-key adv --keyserver keyserver.ubuntu.com --recv 68576280
@@ -245,15 +336,14 @@ apt-get install -y git nodejs
 
 # Install ob-relay
 git clone https://github.com/OB1Company/ob-relay.git /home/openbazaar/ob-relay
-cd /home/openbazaar/ob-relay && git checkout "{{obRelayBranch}}"
-cd /home/openbazaar/ob-relay && npm install
-chown -R openbazaar:openbazaar /home/openbazaar/ob-relay
-chmod -R 760 /home/openbazaar/ob-relay
+install_latest_ob_relay
+_chown /home/openbazaar/ob-relay
 
 setState STARTING_OPENBAZAAR_RELAY
 
 # Create Upstart script for ob-relay
 cat > /etc/init/ob-relay.conf <<-EOF
+description "OpenBazaar Server Relay"
 setuid openbazaar
 setgid openbazaar
 chdir /home/openbazaar/ob-relay
@@ -262,11 +352,15 @@ start on runlevel [2345]
 stop on runlevel [06]
 env OB_RELAY_SSL_KEY_FILE="/home/openbazaar/ssl/deploy.key"
 env OB_RELAY_SSL_CERT_FILE="/home/openbazaar/ssl/deploy.crt"
-exec node /home/openbazaar/ob-relay/app.js >> /home/openbazaar/logs/ob-relay.log
+exec node app.js >> /home/openbazaar/logs/ob-relay.log 2>&1
 EOF
 
 # Start ob-relay
-service ob-relay start
+initctl reload-configuration && service ob-relay start
+
+##
+## Install required system packages
+##
 
 setState INSTALLING_SYSTEM_PACKAGES
 
@@ -286,15 +380,62 @@ ufw allow 18469/tcp
 ufw allow 18470/tcp
 ufw allow 18467/udp
 
+# Setup monitoring for hanging nodes
+apt-get install -y monit
+
+cat > /etc/init/monit.conf <<-EOF
+description "Monit service manager"
+limit core unlimited unlimited
+start on runlevel [2345]
+stop on starting rc RUNLEVEL=[016]
+expect daemon
+respawn
+exec /usr/bin/monit -c /etc/monitrc
+pre-stop exec /usr/bin/monit -c /etc/monitrc quit
+EOF
+
+mkdir -p /etc/monit/bin
+cat > /etc/monit/bin/openbazaar_check.sh <<-EOF
+#!/bin/sh
+curl --connect-timeout 60 -k -XPOST https://localhost:18469
+EOF
+chmod +x /etc/monit/bin/openbazaar_check.sh
+
+cat > /etc/monit/conf.d/http <<-EOF
+set httpd port 2812 and
+  use address localhost
+  allow localhost
+EOF
+
+cat > /etc/monit/conf.d/openbazaard <<-EOF
+check program openbazaard with path "/etc/monit/bin/openbazaar_check.sh"
+  start program = "/usr/sbin/service openbazaard start"
+  stop program = "/usr/sbin/service openbazaard stop"
+  if status != 0 3 times within 4 cycles then restart
+EOF
+
+initctl reload-configuration
+service monit start
+monit reload
+
+##
+## Install OpenBazaar-Server
+##
+
+# Install system packages we need
+apt-get install -y python2.7 build-essential python-dev libffi-dev libssl-dev
+
+# Only mark state as installing after the above is done to help even out
+# the amount of time each state runs
 setState INSTALLING_OPENBAZAAR_SERVER
 
 # Install OpenBazaar-Server
-apt-get install -y python2.7 build-essential python-dev libffi-dev libssl-dev
-git clone https://github.com/OpenBazaar/OpenBazaar-Server.git /home/openbazaar/src
+git clone https://github.com/OpenBazaar/OpenBazaar-Server.git /home/openbazaar/ob-server
 easy_install pip
 pip install virtualenv
 virtualenv --python=python2.7 /home/openbazaar/venv
-/home/openbazaar/venv/bin/pip install -r /home/openbazaar/src/requirements.txt
+install_latest_openbazaard
+_chown /home/openbazaar
 
 # Create config file
 cat > /home/openbazaar/ob.cfg <<-EOF
@@ -322,33 +463,39 @@ mainnet_seed3 = seed.obcentral.org:8080,f0ff751b27ddaa86a075aa09785c438cd2cebadb
 testnet_seed1 = seed.openbazaar.org:8080,5b44be5c18ced1bc9400fe5e79c8ab90204f06bebacc04dd9c70a95eaca6e117
 EOF
 
+_chown /home/openbazaar/ob.cfg
+
 # Setup data directory and permissions
-mkdir -p /home/openbazaar/data
-chown -R openbazaar:openbazaar /home/openbazaar
-chmod -R 760 /home/openbazaar
-chmod 640 /home/openbazaar/ob.cfg
+_mkdir /home/openbazaar/data
+chmod -R 770 /home/openbazaar/data
+chmod 660 /home/openbazaar/ob.cfg
 
 setState STARTING_OPENBAZAAR_SERVER
 
 # Create Upstart script for OpenBazaar-Server
 cat > /etc/init/openbazaard.conf <<-EOF
+description "OpenBazaar Server"
 setuid openbazaar
 setgid openbazaar
 chdir /home/openbazaar
 respawn
 start on runlevel [2345]
 stop on runlevel [06]
-exec /home/openbazaar/venv/bin/python /home/openbazaar/src/openbazaard.py start -a 0.0.0.0 >> /home/openbazaar/logs/openbazaard.log
+exec ./venv/bin/python ./ob-server/openbazaard.py start -a 0.0.0.0 >> ./logs/openbazaard.log 2>&1
 EOF
 
 # Start OpenBazaar-Server
-service openbazaard start
+initctl reload-configuration &&  service openbazaard start
 
 setState READY
 </script>
 
+<script src="https://cdn.jsdelivr.net/vue/2.0.0-rc/vue.min.js"></script>
+<script src="https://cdn.ravenjs.com/3.7.0/vue/raven.min.js"
+    crossorigin="anonymous"></script>
+<script>Raven.config('https://021179cb95d64ca89467f794ad27b6d5@sentry.io/107492').install();</script>
 
-<script src="js/app-7a14d5075c.min.js"></script>
+<script src="app-b0e333a774.min.js"></script>
 <!-- endinject -->
 </body>
 </html>
