@@ -9,7 +9,7 @@
   <link rel="icon" type="image/png" href="images/favicon.png" />
 
   
-  <link rel="stylesheet" href="css/style-b554e5213e.min.css">
+  <link rel="stylesheet" href="css/style-4f23aa774f.min.css">
   <!-- endinject -->
 </head>
 
@@ -91,21 +91,21 @@
               <td class="right">IP</td>
               <td class="relative">
                 <input type="text" id="ip" readonly v-model="node.ipv4" />
-                <a class="copyLink" href="#" data-clipboard-target="#ip">Copy</a>
+                <a data-copy class="inputOverlayLink" href="#" data-clipboard-target="#ip">Copy</a>
               </td>
             </tr>
             <tr>
               <td class="right">Username</td>
               <td class="relative">
                 <input type="text" id="obUsername" readonly v-model="node.obUser.name"/>
-                <a class="copyLink" href="#" data-clipboard-target="#obUsername">Copy</a>
+                <a data-copy class="inputOverlayLink" href="#" data-clipboard-target="#obUsername">Copy</a>
               </td>
             </tr>
             <tr>
               <td class="right vMiddle paddingTop2">Password</td>
               <td class="relative">
-                <textarea id="obPassword">{{node.obUser.password}}</textarea>
-                <a class="copyLink" href="#" data-clipboard-target="#obPassword">Copy</a>
+                <textarea id="obPassword" class="password">{{node.obUser.password}}</textarea>
+                <a data-copy class="inputOverlayLink bottom" href="#" data-clipboard-target="#obPassword">Copy</a>
               </td>
             </tr>
             <tr>
@@ -124,21 +124,21 @@
               <td class="right">IP</td>
               <td class="relative">
                 <input type="text" readonly v-model="node.ipv4" />
-                <a class="copyLink" href="#" data-clipboard-target="#ip">Copy</a>
+                <a data-copy class="inputOverlayLink" href="#" data-clipboard-target="#ip">Copy</a>
               </td>
             </tr>
             <tr>
               <td class="right">Username</td>
               <td class="relative">
                 <input type="text" id="vpsUsername" readonly v-model="node.vpsUser.name" />
-                <a class="copyLink" href="#" data-clipboard-target="#vpsUsername">Copy</a>
+                <a data-copy class="inputOverlayLink" href="#" data-clipboard-target="#vpsUsername">Copy</a>
               </td>
             </tr>
             <tr>
               <td class="right vMiddle paddingTop2">Password</td>
               <td class="relative">
-                <textarea id="vpsPassword">{{node.vpsUser.password}}</textarea>
-                <a class="copyLink" href="#" data-clipboard-target="#vpsPassword">Copy</a>
+                <textarea id="vpsPassword" class="password">{{node.vpsUser.password}}</textarea>
+                <a data-copy class="inputOverlayLink bottom" href="#" data-clipboard-target="#vpsPassword">Copy</a>
               </td>
             </tr>
           </table>
@@ -188,6 +188,10 @@
       </div>
     </div>
   </div>
+
+<script src="https://cdn.jsdelivr.net/vue/2.0.0-rc/vue.min.js" integrity="sha384-XVWdOBeuvGajqWCkiJ1AGDeOyTwfhkpCvh2MFECfDEotXUhvP6rFCgAVFLj6NcI0" crossorigin="anonymous"></script>
+<script src="https://cdn.ravenjs.com/3.7.0/vue/raven.min.js" integrity="sha384-HwK56NdRCRkImJI9d9d6GLgn0msPijJ7hrdzoP+qBOlif0o1/9uD94U4djd4PGAU" crossorigin="anonymous"></script>
+<script>Raven.config('https://021179cb95d64ca89467f794ad27b6d5@sentry.io/107492').install();</script>
 
 <script type="text/javascript">
 function showAnswer(num) {
@@ -490,12 +494,8 @@ initctl reload-configuration &&  service openbazaard start
 setState READY
 </script>
 
-<script src="https://cdn.jsdelivr.net/vue/2.0.0-rc/vue.min.js"></script>
-<script src="https://cdn.ravenjs.com/3.7.0/vue/raven.min.js"
-    crossorigin="anonymous"></script>
-<script>Raven.config('https://021179cb95d64ca89467f794ad27b6d5@sentry.io/107492').install();</script>
 
-<script src="app-b0e333a774.min.js"></script>
+<script src="app-187ad74a06.min.js"></script>
 <!-- endinject -->
 </body>
 </html>
