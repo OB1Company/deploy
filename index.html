@@ -150,7 +150,7 @@
       <div class="marginTop10">
         <div v-on:click="downloadCredentialsFile" class="buttonSmall floatLeft">Save Your Credentials!</div>
         <div class="finishedButtons">
-          <a href="https://openbazaar.org/download.html" target="_blank"><div class="buttonSmallDark floatLeft">Download OpenBazaar</div></a>
+          <a href="https://openbazaar.org/download.html?deploy" target="_blank"><div class="buttonSmallDark floatLeft">Download OpenBazaar</div></a>
           <div v-on:click="deployNewNode" class="buttonSmallDark floatLeft" style="margin: 0">Deploy Another Node</div>
         </div>
       </div>
@@ -186,6 +186,11 @@
         <br/>
         <div class="answer hide" id="a5">You can run an OpenBazaar node off the lowest cost droplet, which is $5 per month. If you <a href="https://www.digitalocean.com/?refcode=eaa306f7dd3d&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste" target="_blank">sign-up via our referral code</a>, you will get $10 credit, which is 2 months of running OpenBazaar for free!</div>
       </div>
+      <div class="question" id="q6" onclick="showAnswer(6)">
+        Where can I learn more about Deploy?
+        <br/>
+        <div class="answer hide" id="a6">You can learn more about Deploy by reading <a href="https://medium.com/ob1-company/introducing-ob1-deploy-8dc7d74787c6" target="_blank">this article.</a></div>
+      </div>
     </div>
   </div>
 
@@ -201,6 +206,7 @@ function showAnswer(num) {
   document.getElementById("a3").className = "answer hide";
   document.getElementById("a4").className = "answer hide";
   document.getElementById("a5").className = "answer hide";
+  document.getElementById("a6").className = "answer hide";
 
   // show the clicked answers
   document.getElementById("a" + num).className = "answer";
@@ -394,8 +400,8 @@ start on runlevel [2345]
 stop on starting rc RUNLEVEL=[016]
 expect daemon
 respawn
-exec /usr/bin/monit -c /etc/monitrc
-pre-stop exec /usr/bin/monit -c /etc/monitrc quit
+exec /usr/bin/monit -c /etc/monit/monitrc
+pre-stop exec /usr/bin/monit -c /etc/monit/monitrc quit
 EOF
 
 mkdir -p /etc/monit/bin
@@ -404,6 +410,17 @@ cat > /etc/monit/bin/openbazaar_check.sh <<-EOF
 curl --connect-timeout 60 -k -XPOST https://localhost:18469
 EOF
 chmod +x /etc/monit/bin/openbazaar_check.sh
+
+cat > /etc/monit/monitrc <<-EOF
+set daemon 300            # Run checks every 5 minutes
+with start delay 1200     # Don't start checking until 20 minutes after startup
+
+set logfile /var/log/monit.log
+set idfile /var/lib/monit/id
+set statefile /var/lib/monit/state
+
+include /etc/monit/conf.d/*
+EOF
 
 cat > /etc/monit/conf.d/http <<-EOF
 set httpd port 2812 and
@@ -415,7 +432,8 @@ cat > /etc/monit/conf.d/openbazaard <<-EOF
 check program openbazaard with path "/etc/monit/bin/openbazaar_check.sh"
   start program = "/usr/sbin/service openbazaard start"
   stop program = "/usr/sbin/service openbazaard stop"
-  if status != 0 3 times within 4 cycles then restart
+  if status != 0 4 times within 6 cycles then restart
+  if 20 restarts within 40 cycles then unmonitor
 EOF
 
 initctl reload-configuration
@@ -495,7 +513,7 @@ setState READY
 </script>
 
 
-<script src="app-187ad74a06.min.js"></script>
+<script src="app-bb2fb98e57.min.js"></script>
 <!-- endinject -->
 </body>
 </html>
