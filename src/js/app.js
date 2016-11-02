@@ -20,16 +20,17 @@ const getReadyStatusMaxAttempts = 120;
 const getReadyStatusPollInterval = 30000;
 
 // The possible data centers we'll provision nodes in
-const availableDataCenters = [
-   // San Francisco
-  'sfo1', 'sfo2',
-
-  // New York
-  'nyc1', 'nyc2', 'nyc3',
-
-  // Toronto
-  'tor1',
-];
+// It maps center to the avaialble data centers in that city
+const availableDataCenters = {
+  'nyc': [1, 2, 3],
+  'sfo': [1, 2],
+  'ams': [2, 3],
+  'sgp': [1],
+  'lon': [1],
+  'fra': [1],
+  'tor': [1],
+  'blr': [1],
+};
 
 // cloudInitScriptTemplate is a template for an OpenBazaar provisioning script
 let cloudInitScriptTemplate = $('#cloud-init-script-template').text();
@@ -118,11 +119,15 @@ function provisionNode() {
   // Create a DO client
   let doClient = new DigitalOcean(App.apiKey);
 
+  // Select the region to use
+  let dataCenterRegions = availableDataCenters[ViewState.datacenter];
+  let region = ViewState.datacenter + dataCenterRegions[Math.floor(Math.random() * dataCenterRegions.length)];
+
   // Perform the provisioning
   return doClient.createDroplet({
     name: node.name,
     size: '512mb',
-    region: availableDataCenters[Math.floor(Math.random() * availableDataCenters.length)],
+    region: region,
     image: 'ubuntu-14-04-x64',
     user_data: cloudInitScriptTemplate
       .replace('{{vpsPassword}}', node.vpsUser.password)

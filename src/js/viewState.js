@@ -9,6 +9,8 @@ class ViewState extends Object {
     this.apiKey = '';
     this.nodes = [new Node()];
 
+    this.datacenter = 'nyc';
+
     this.error = null;
     this.showBlankAPIKeyAsInvalid = false;
   }
