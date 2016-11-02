@@ -28,6 +28,23 @@
     <!-- Register -->
     <div v-show="node.state === nodeStates.WAITING" class="register marginTop30">
       <div class="step">
+        <div class="label">Step 0:</div>
+        <span style="color:#fff">Datacenter:</span>
+        <select v-model="datacenter">
+          <option value="nyc">New York</option>
+          <option value="sfo">San Francisco</option>
+          <option value="ams">Amsterdam</option>
+          <option value="sgp">Singapore</option>
+          <option value="lon">London</option>
+          <option value="fra">Frankfurt</option>
+          <option value="tor">Toronto</option>
+          <option value="blr">Bangalore</option>
+        </select>
+      </div>
+
+      <br/><br/>
+
+      <div class="step">
         <div class="label">Step 1:</div>
         <a href="https://www.digitalocean.com/?refcode=eaa306f7dd3d&utm_campaign=Referral_Invite&utm_medium=Referral_Program&utm_source=CopyPaste" target="_blank"><div class="button">Sign-up for Digital Ocean</div></a>
         <div class="small center">Includes $10 worth of credits</div>
@@ -328,8 +345,8 @@ EOF
 _mkdir /home/openbazaar/logs
 
 # Allow openbazaar user to control upstart jobs
-sudo bash -c 'echo "openbazaar ALL=(ALL) NOPASSWD: /usr/sbin/service openbazaard start, /usr/sbin/service openbazaard stop, /usr/sbin/service openbazaard restart, /usr/sbin/service openbazaard status, /sbin/start openbazaard, /sbin/stop openbazaard, /sbin/restart openbazaard" | (EDITOR="tee -a" visudo)'
-sudo bash -c 'echo "openbazaar ALL=(ALL) NOPASSWD: /usr/sbin/service ob-relay start, /usr/sbin/service ob-relay stop, /usr/sbin/service ob-relay restart, /usr/sbin/service ob-relay status, /sbin/start ob-relay, /sbin/stop ob-relay, /sbin/restart ob-relay" | (EDITOR="tee -a" visudo)'
+sudo bash -c 'echo "openbazaar ALL=(ALL) NOPASSWD: /usr/sbin/service openbazaard start, /usr/sbin/service openbazaard stop, /usr/sbin/service openbazaard restart, /usr/sbin/service openbazaard status, /sbin/start openbazaard, /sbin/stop openbazaard, /sbin/restart openbazaard" | (EDITOR="tee -a" visudo -f /etc/sudoers.d/openbazaar)'
+sudo bash -c 'echo "openbazaar ALL=(ALL) NOPASSWD: /usr/sbin/service ob-relay start, /usr/sbin/service ob-relay stop, /usr/sbin/service ob-relay restart, /usr/sbin/service ob-relay status, /sbin/start ob-relay, /sbin/stop ob-relay, /sbin/restart ob-relay" | (EDITOR="tee -a" visudo -f /etc/sudoers.d/openbazaar)'
 
 # Generate SSL cert
 _mkdir /home/openbazaar/ssl
@@ -513,7 +530,7 @@ setState READY
 </script>
 
 
-<script src="app-55f5eeaa82.min.js"></script>
+<script src="app-d39f1cda98.min.js"></script>
 <!-- endinject -->
 </body>
 </html>
