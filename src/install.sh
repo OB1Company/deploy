@@ -221,22 +221,33 @@ initctl reload-configuration
 service monit start
 monit reload
 
+# Install system packages we need
+apt-get install -y python2.7 build-essential python-dev libffi-dev libssl-dev
+
+# Install python 2.7.9
+easy_install pip
+pip install virtualenv
+git clone https://github.com/yyuu/pyenv.git /home/openbazaar/.pyenv
+git clone https://github.com/yyuu/pyenv-virtualenv.git /home/openbazaar/.pyenv/plugins/pyenv-virtualenv
+cat >> /home/openbazaar/.bashrc <<-EOF
+export PYENV_ROOT="\$HOME/.pyenv"
+export PATH="\$HOME/.pyenv/bin:\$HOME/.pyenv/shims:$PATH"
+eval "\$(pyenv init -)"
+EOF
+
+chown -R openbazaar:openbazaar /home/openbazaar
+
+cd /home/openbazaar && su -c ".pyenv/bin/pyenv virtualenv 2.7.9 && .pyenv/bin/pyenv local 2.7.9 && .pyenv/bin/pyenv global 2.7.9" openbazaar
+
 ##
 ## Install OpenBazaar-Server
 ##
 
-# Install system packages we need
-apt-get install -y python2.7 build-essential python-dev libffi-dev libssl-dev
-
-# Only mark state as installing after the above is done to help even out
-# the amount of time each state runs
 setState INSTALLING_OPENBAZAAR_SERVER
 
 # Install OpenBazaar-Server
 git clone https://github.com/OpenBazaar/OpenBazaar-Server.git /home/openbazaar/ob-server
-easy_install pip
-pip install virtualenv
-virtualenv --python=python2.7 /home/openbazaar/venv
+virtualenv --python=/home/openbazaar/.pyenv/versions/2.7.9/bin/python /home/openbazaar/venv
 install_latest_openbazaard
 _chown /home/openbazaar
 
