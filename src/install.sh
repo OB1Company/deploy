@@ -248,7 +248,7 @@ _chown /home/openbazaar
 cat > /home/openbazaar/ob.cfg <<-EOF
 [CONSTANTS]
 DATA_FOLDER = /home/openbazaar/data/
-TRANSACTION_FEE = 20400
+TRANSACTION_FEE = 30000
 RESOLVER = https://resolver.onename.com/
 [LIBBITCOIN_SERVERS]
 mainnet_server1 = tcp://libbitcoin1.openbazaar.org:9091
